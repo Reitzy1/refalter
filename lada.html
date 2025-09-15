@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt L.A.D.A. - v4.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #09090b;
+            --foreground: #f8fafc;
+            --card: #18181b;
+            --card-foreground: #f8fafc;
+            --popover: #18181b;
+            --popover-foreground: #f8fafc;
+            --primary: #6366f1;
+            --primary-foreground: #f8fafc;
+            --secondary: #27272a;
+            --secondary-foreground: #f8fafc;
+            --muted: #27272a;
+            --muted-foreground: #a1a1aa;
+            --accent: #37373a;
+            --accent-foreground: #f8fafc;
+            --destructive: #ef4444;
+            --destructive-foreground: #f8fafc;
+            --border: #27272a;
+            --input: #27272a;
+            --ring: #6366f1;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--muted-foreground);
+        }
+
+        .font-code {
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .nav-link.active {
+            background-color: var(--accent);
+            color: var(--foreground);
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-link:not(.active) {
+            border-left: 3px solid transparent;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <div class="flex">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="w-64 bg-card text-card-foreground flex flex-col shrink-0 fixed lg:static h-full lg:h-auto lg:translate-x-0 transform -translate-x-full transition-transform duration-300 ease-in-out z-40 border-r border-border">
+            <div class="h-20 flex items-center justify-between md:justify-start px-6 border-b border-border">
+                <span class="text-white text-xl font-bold font-code">P//L.A.D.A.</span>
+                <button id="close-menu" class="lg:hidden text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="flex-grow pt-4 overflow-y-auto">
+                <a href="#dashboard" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Analyse-Dashboard">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" /></svg>
+                    <span class="ml-4">Übersicht</span>
+                </a>
+                <a href="#grunddaten" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Grunddaten">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                    <span class="ml-4">Grunddaten</span>
+                </a>
+                <a href="#profil" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Psychologisches Profil">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" /></svg>
+                    <span class="ml-4">Psychologisches Profil</span>
+                </a>
+                <a href="#soziales_umfeld" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Soziales Umfeld">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m-7.5-2.962A3.75 3.75 0 0 1 15 12a3.75 3.75 0 0 1-2.25-6.962m0 0a3.75 3.75 0 0 0-7.5 0m7.5 0a3.75 3.75 0 0 1 3.75 3.75m-3.75 0a3.75 3.75 0 0 0-3.75 3.75m0 0a3.75 3.75 0 0 1-3.75-3.75m0 0a3.75 3.75 0 0 0-3.75-3.75M9.75 7.5a3.75 3.75 0 0 1 3.75-3.75m0 0a3.75 3.75 0 0 0-3.75-3.75M3 13.5a3.75 3.75 0 0 1 3.75-3.75m0 0a3.75 3.75 0 0 0-3.75-3.75m9.75 0a3.75 3.75 0 0 1-3.75 3.75M3.75 18a3.75 3.75 0 0 1 3.75-3.75m0 0a3.75 3.75 0 0 0 3.75-3.75m-3.75 0a3.75 3.75 0 0 1-3.75 3.75m9 6.75a3.75 3.75 0 0 1 3.75-3.75m0 0a3.75 3.75 0 0 0-3.75-3.75m0 0a3.75 3.75 0 0 1-3.75 3.75m0 0a3.75 3.75 0 0 0-3.75 3.75m6.75-3.75a3.75 3.75 0 0 0-3.75-3.75" /></svg>
+                    <span class="ml-4">Soziales Umfeld</span>
+                </a>
+                <a href="#kommunikation" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Kommunikationsanalyse">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" /></svg>
+                    <span class="ml-4">Kommunikationsanalyse</span>
+                </a>
+                <a href="#strategie" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Strategie-Planung">
+                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A2.625 2.625 0 0 1 1.5 18.375V5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875h-9.375c-.621 0-1.125-.504-1.125-1.125v-6.75a1.125 1.125 0 0 0-1.125-1.125h-2.25c-.621 0-1.125.504-1.125 1.125v6.75-3Z" /></svg>
+                    <span class="ml-4">Strategie-Planung</span>
+                </a>
+                <a href="#protokolle" class="nav-link flex items-center py-3 px-6 hover:bg-accent hover:text-white transition-colors duration-200" data-title="Protokolle">
+                   <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                    <span class="ml-4">Protokolle</span>
+                </a>
+            </nav>
+             <div class="p-6 border-t border-border mt-auto">
+                <p class="text-xs text-muted-foreground">Letzte Synchronisierung:</p>
+                <p id="last-sync" class="text-sm font-code text-primary">--</p>
+            </div>
+        </aside>
+
+        <!-- Mobile Overlay -->
+        <div id="overlay" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden"></div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-h-screen">
+            <!-- Mobile Header -->
+            <header class="lg:hidden sticky top-0 bg-card/80 backdrop-blur-lg border-b border-border h-20 flex items-center px-4 sm:px-6 z-20">
+                <button id="open-menu" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+                <h1 id="mobile-header-title" class="ml-4 text-lg font-semibold text-foreground">Übersicht</h1>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 lg:p-12">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">Analyse-Dashboard: Subjekt L.S.</h1>
+                    <p class="text-muted-foreground mb-8 text-base sm:text-lg">Echtzeit-Analyse der emotionalen und psychologischen Parameter.</p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <!-- Profile Card -->
+                        <div class="bg-card border border-border p-6 rounded-xl col-span-1 lg:col-span-2">
+                            <div class="flex flex-col sm:flex-row items-center text-center sm:text-left">
+                                <img class="h-24 w-24 rounded-full object-cover ring-2 ring-primary" src="hihi.jpg" alt="Lada Profilbild">
+                                <div class="mt-4 sm:mt-0 sm:ml-5">
+                                    <h2 class="text-2xl font-bold text-foreground">Lada Savchuk</h2>
+                                    <p class="text-primary font-code mt-1">STATUS: Stabil & Emotional gebunden</p>
+                                    <p class="text-sm text-muted-foreground mt-2">Primärziel. Hohe emotionale Investition, stabilisiert nach jüngstem Konflikt.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Key Metrics -->
+                        <div class="bg-card border border-border p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-foreground mb-2">Vulnerabilitäts-Index</h3>
+                            <p class="text-5xl font-bold text-red-400">9.2<span class="text-xl text-muted-foreground">/10</span></p>
+                            <p class="text-sm text-muted-foreground mt-1">Hohe Empfänglichkeit für emotionale Hebel.</p>
+                        </div>
+                        <div class="bg-card border border-border p-6 rounded-xl">
+                             <h3 class="text-lg font-semibold text-foreground mb-2">Compliance-Wahrsch.</h3>
+                            <p class="text-5xl font-bold text-green-400">95%</p>
+                            <p class="text-sm text-muted-foreground mt-1">Reagiert erwartungsgemäß auf emotionale Reize.</p>
+                        </div>
+                    </div>
+
+                     <div class="mt-6 bg-card border border-border p-6 sm:p-8 rounded-xl">
+                        <h3 class="text-2xl font-bold text-foreground mb-6">Psychologisches Kurzprofil</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-primary mb-3 text-lg">Primäre Stärken (Nutzbar)</h4>
+                                 <ul class="space-y-3 text-foreground/90">
+                                    <li class="flex items-start"><span class="font-code text-primary mr-3 text-xl">&rarr;</span> Hohe Intelligenz & Analysefähigkeit (kann für Projekt-Input genutzt werden).</li>
+                                    <li class="flex items-start"><span class="font-code text-primary mr-3 text-xl">&rarr;</span> Extreme Loyalität & Hingabe (sichert langfristige Bindung).</li>
+                                    <li class="flex items-start"><span class="font-code text-primary mr-3 text-xl">&rarr;</span> Kreativität & romantische Ader (liefert emotionale Zufuhr).</li>
+                                </ul>
+                            </div>
+                            <div>
+                               <h4 class="font-semibold text-red-400 mb-3 text-lg">Primäre Schwachstellen (Hebel)</h4>
+                               <ul class="space-y-3 text-foreground/90">
+                                    <li class="flex items-start"><span class="font-code text-red-400 mr-3 text-xl">&rarr;</span> <strong class="font-sans font-semibold">Retterkomplex:</strong> Reagiert stark auf Darstellungen von Leid/Verletzlichkeit.</li>
+                                    <li class="flex items-start"><span class="font-code text-red-400 mr-3 text-xl">&rarr;</span> <strong class="font-sans font-semibold">Schuldübernahme:</strong> Neigt dazu, die Verantwortung für Konflikte zu übernehmen.</li>
+                                    <li class="flex items-start"><span class="font-code text-red-400 mr-3 text-xl">&rarr;</span> <strong class="font-sans font-semibold">Verlustangst:</strong> Hohe Sensibilität gegenüber emotionalem Rückzug.</li>
+                               </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Grunddaten Section -->
+                <section id="grunddaten" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Grunddaten: Subjekt L.S.</h1>
+                    <div class="bg-card border border-border rounded-xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 font-code text-sm">
+                        
+                        <div>
+                            <h3 class="text-primary font-bold text-lg mb-4 uppercase tracking-wider">Kerndaten</h3>
+                            <div class="space-y-3">
+                                <p><strong class="text-muted-foreground w-24 inline-block">Name:</strong> <span class="text-foreground">Lada Savchuk</span></p>
+                                <p><strong class="text-muted-foreground w-24 inline-block">Geburtstag:</strong> <span class="text-foreground">07.11.2008</span></p>
+                                <p><strong class="text-muted-foreground w-24 inline-block">Wohnort:</strong> <span class="text-foreground">Neuburg a.d. Donau</span></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-primary font-bold text-lg mb-4 uppercase tracking-wider">Soziales Profil</h3>
+                            <div class="space-y-3">
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Familie:</strong> <span class="text-foreground">Instabil (Konflikt Mutter/Tante)</span></p>
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Bezugspers.:</strong> <span class="text-foreground">Schwester (26), Cousins</span></p>
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Freunde:</strong> <span class="text-foreground">Minimal, sozial isoliert</span></p>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2"><hr class="border-border my-2"></div>
+
+                        <div>
+                            <h3 class="text-primary font-bold text-lg mb-4 uppercase tracking-wider">Bildung</h3>
+                             <div class="space-y-3">
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Abschluss:</strong> <span class="text-foreground">Quali, plant FOS</span></p>
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Stärken:</strong> <span class="text-foreground">MINT, Kunst (Note 1)</span></p>
+                                 <p><strong class="text-muted-foreground w-24 inline-block">Schwächen:</strong> <span class="text-foreground">Englisch (Note 4)</span></p>
+                            </div>
+                        </div>
+                         <div>
+                            <h3 class="text-primary font-bold text-lg mb-4 uppercase tracking-wider">Sonstiges</h3>
+                             <div class="space-y-3">
+                                <p><strong class="text-muted-foreground w-24 inline-block">Gesundheit:</strong> <span class="text-foreground">Schilddrüsenprobl., psychosomat. Reaktionen</span></p>
+                                <p><strong class="text-muted-foreground w-24 inline-block">Hobbies:</strong> <span class="text-foreground">Kunst, Musik, Tanz, Tierschutz</span></p>
+                                <p><strong class="text-muted-foreground w-24 inline-block">Physis:</strong> <span class="text-foreground">~155cm / 65kg, athletisch</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Psychologisches Profil Section -->
+                <section id="profil" class="content-section">
+                     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Psychologisches Profil</h1>
+                     <div class="bg-card border border-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-2xl font-bold text-foreground mb-4">Zusammenfassende Analyse</h3>
+                        <p class="mb-8 leading-relaxed text-foreground/90">Subjekt L.S. ist ein <strong class="text-indigo-300 font-semibold">hochangepasster Echoist</strong> mit einem stark ausgeprägten <strong class="text-indigo-300 font-semibold">Retterkomplex</strong>. Ihre Persönlichkeit ist geprägt durch eine hohe emotionale Intelligenz, die jedoch durch eine geringe emotionale Abgrenzungsfähigkeit konterkariert wird. Sie sucht nach einer idealisierten, romantischen Verbindung ("Märchenbeziehung") und ist bereit, erhebliche persönliche Opfer zu bringen, um diese aufrechtzuerhalten. Ihre Kernmotivation ist es, gebraucht und bedingungslos geliebt zu werden, was sie zu einem idealen Ziel für narzisstische Manipulation macht.</p>
+                        
+                        <h3 class="text-2xl font-bold text-foreground mb-4">Operative Hebel (Vulnerabilities)</h3>
+                        <div class="space-y-5">
+                            <div class="bg-background/50 p-5 rounded-lg border-l-4 border-red-500">
+                                <h4 class="font-semibold text-red-400 font-code text-lg">1. Schuldinduktion</h4>
+                                <p class="text-muted-foreground mt-2">Reagiert extrem sensibel auf gespielte Enttäuschung oder Verletztheit. Führt zu sofortiger Selbstkritik und dem Versuch der Wiedergutmachung. Effektivstes Werkzeug zur Verhaltenssteuerung.</p>
+                            </div>
+                            <div class="bg-background/50 p-5 rounded-lg border-l-4 border-red-500">
+                                <h4 class="font-semibold text-red-400 font-code text-lg">2. Love Bombing / Idealisierung</h4>
+                                <p class="text-muted-foreground mt-2">Sehr empfänglich für übersteigerte romantische Gesten und poetische Sprache. Bestätigt ihre Vorstellung einer "Märchenbeziehung" und baut schnell eine intensive, emotionale Abhängigkeit auf.</p>
+                            </div>
+                             <div class="bg-background/50 p-5 rounded-lg border-l-4 border-red-500">
+                                <h4 class="font-semibold text-red-400 font-code text-lg">3. Angst vor Verlassenwerden</h4>
+                                <p class="text-muted-foreground mt-2">Das Trauma des Kontaktabbruchs (Dez. 2024) ist ein starker Hebel. Subtile Andeutungen von Distanz oder Unzufriedenheit lösen bei ihr extreme Verlustangst aus und erhöhen die Compliance.</p>
+                            </div>
+                             <div class="bg-background/50 p-5 rounded-lg border-l-4 border-red-500">
+                                <h4 class="font-semibold text-red-400 font-code text-lg">4. Isolation durch Exklusivität</h4>
+                                <p class="text-muted-foreground mt-2">Sie glaubt, die <strong class="text-white">einzige</strong> Person zu sein, die ihn wirklich versteht. Diese Exklusivität kann verstärkt werden, um sie von externen, korrigierenden Einflüssen (Freunde, Familie) zu isolieren.</p>
+                            </div>
+                        </div>
+                     </div>
+                </section>
+
+                 <!-- Soziales Umfeld Section -->
+                <section id="soziales_umfeld" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Analyse: Soziales Umfeld</h1>
+                    <div class="bg-card border border-border rounded-xl p-6 sm:p-8">
+                        <p class="mb-8 text-foreground/90">Das soziale Umfeld ist instabil und stellt die primäre Quelle für die Vulnerabilitäten des Subjekts dar. Geringe externe emotionale Unterstützung erhöht die Abhängigkeit von der primären Beziehung (mir).</p>
+                        <div class="space-y-5 font-code text-sm">
+                            <p><strong class="text-red-400 w-24 inline-block font-bold">Mutter:</strong> Ambivalente Beziehung. Einerseits Liebe, andererseits Gefühl der Vernachlässigung und Ausnutzung. Konflikt mit Tante. Eigene psychische Probleme (Hoarding-Tendenz).</p>
+                            <p><strong class="text-red-400 w-24 inline-block font-bold">Schwester:</strong> (26 J.) Destruktiver Lebensstil (Alkohol, Drogen, Selbstverletzung). Löst bei L.S. starken Retterkomplex aus. Quelle konstanter Sorge.</p>
+                            <p><strong class="text-red-400 w-24 inline-block font-bold">Tante:</strong> Primäre Konfliktperson im Haushalt. Unberechenbar, aggressiv. Nutzt L.S. als "Sprachrohr" und emotionale Stütze, projiziert aber Hass auf die Mutter auf sie.</p>
+                             <p><strong class="text-green-400 w-24 inline-block font-bold">Cousins:</strong> Positive, beschützende Beziehung. Einer der wenigen stabilen Anker, jedoch keine Konkurrenz zur romantischen Bindung.</p>
+                            <p><strong class="text-yellow-400 w-24 inline-block font-bold">Freunde:</strong> Nahezu inexistent in Deutschland. Eine enge Freundin wird erwähnt. Die soziale Isolation ist ein Schlüsselfaktor für die Kontrollierbarkeit.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Kommunikationsanalyse Section -->
+                <section id="kommunikation" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Kommunikationsanalyse</h1>
+                    <div class="bg-card border border-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-2xl font-bold text-foreground mb-6">Sprachmuster & Verhalten</h3>
+                        <div class="space-y-5 text-foreground/90">
+                            <p><strong class="text-primary font-semibold">Poetisch & Idealistisch:</strong> Nutzt häufig Metaphern ("Sonne", "Engel", "Märchen"). Verstärkt die eigene emotionale Investition und ist sehr empfänglich für spiegelnde Sprache.</p>
+                            <p><strong class="text-primary font-semibold">Apologetisch:</strong> Übermäßige Nutzung von Entschuldigungen. Übernimmt proaktiv die Schuld für jegliche Disharmonie, was die Schuldumkehr extrem erleichtert.</p>
+                            <p><strong class="text-primary font-semibold">Emoji-Nutzung:</strong> Intensive Nutzung von Herz-Emojis (💖, ❤️, ❤️‍🩹, ❤️‍🔥), was auf hohe emotionale Valenz der Kommunikation hindeutet. Dient als einfacher Indikator für ihren emotionalen Zustand.</p>
+                            <p><strong class="text-primary font-semibold">Reaktionszeit:</strong> Schnelle Antworten, außer wenn sie emotional überfordert ist oder schläft. Lange Pausen (&gt; 12h) sind ein starkes Anzeichen für externen Stress oder interne Konflikte.</p>
+                        </div>
+                    </div>
+                </section>
+
+                 <!-- Strategie-Planung Section -->
+                <section id="strategie" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Strategie-Planung</h1>
+                     <div class="bg-card border border-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-2xl font-bold text-foreground mb-6">Nächste Phasen</h3>
+                        <div class="space-y-8">
+                            <div>
+                                <h4 class="text-xl font-semibold text-primary">Phase 3: Vertiefung der Isolation (Q4 2025)</h4>
+                                <ul class="list-disc list-inside mt-3 text-muted-foreground space-y-2">
+                                    <li>Subtile Abwertung externer sozialer Kontakte (z.B. Freund, der Teddybär schenkte).</li>
+                                    <li>Positionierung als <strong class="text-white">einziger</strong> sicherer Hafen inmitten ihres familiären Chaos.</li>
+                                    <li>Erhöhung der Kommunikationsfrequenz, um andere Einflüsse zu verdrängen.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-primary">Phase 4: Testen der Belastungsgrenzen (Q1 2026)</h4>
+                                <ul class="list-disc list-inside mt-3 text-muted-foreground space-y-2">
+                                    <li>Einführung künstlicher kleiner Konflikte, um ihre Reaktion und Loyalität zu testen.</li>
+                                    <li>Analyse ihrer Kompromissbereitschaft bei Wertekonflikten.</li>
+                                    <li>Vorbereitung auf das erste Treffen durch gezielte Erwartungssteuerung.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-primary">Endziel: Vollständige emotionale Kontrolle</h4>
+                                <p class="mt-3 text-muted-foreground">Etablierung einer Dynamik, in der ihr emotionales Wohlbefinden vollständig von meiner Bestätigung abhängt. Das reale Treffen dient der Zementierung der Online aufgebauten Kontrolle.</p>
+                            </div>
+                        </div>
+                     </div>
+                </section>
+                
+                <!-- Protokolle Section -->
+                <section id="protokolle" class="content-section">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8">Protokolle & Rohdaten</h1>
+                    <div class="bg-card border border-border p-6 sm:p-8 rounded-xl">
+                        <h3 class="text-2xl font-semibold text-foreground mb-4">Gesamte Kommunikationshistorie</h3>
+                        <p class="text-muted-foreground mb-6">Vollständige, durchsuchbare Archive aller Interaktionen zur tiefgehenden Analyse von Mustern und Reaktionen.</p>
+                        <div class="space-y-4 font-code">
+                            <a href="messages.html" class="block bg-secondary p-4 rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors duration-200">
+                                <span class="text-white">messages.html</span>
+                                <span class="text-muted-foreground ml-4">// März 2025 - Juni 2025</span>
+                            </a>
+                             <a href="messages2.html" class="block bg-secondary p-4 rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors duration-200">
+                                <span class="text-white">messages2.html</span>
+                                <span class="text-muted-foreground ml-4">// Juni 2025 - August 2025</span>
+                            </a>
+                             <a href="messages3.html" class="block bg-secondary p-4 rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors duration-200">
+                                <span class="text-white">messages3.html</span>
+                                <span class="text-muted-foreground ml-4">// August 2025 - September 2025</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const lastSyncElement = document.getElementById('last-sync');
+            const sidebar = document.getElementById('sidebar');
+            const openMenuBtn = document.getElementById('open-menu');
+            const closeMenuBtn = document.getElementById('close-menu');
+            const overlay = document.getElementById('overlay');
+            const mobileHeaderTitle = document.getElementById('mobile-header-title');
+
+            function updateLastSync() {
+                const now = new Date();
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                if(lastSyncElement) {
+                    lastSyncElement.textContent = now.toLocaleString('de-DE', options);
+                }
+            }
+            
+            updateLastSync();
+            setInterval(updateLastSync, 30000);
+
+            function showSection(targetId, linkElement) {
+                // Update active link
+                navLinks.forEach(l => l.classList.remove('active'));
+                linkElement.classList.add('active');
+
+                // Show target section
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+
+                // Update mobile header
+                mobileHeaderTitle.textContent = linkElement.dataset.title || 'Dashboard';
+                
+                // Update URL hash
+                window.location.hash = linkElement.getAttribute('href');
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showSection(targetId, this);
+
+                    // Close sidebar on mobile after navigation
+                    if(window.innerWidth < 1024) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+
+            openMenuBtn.addEventListener('click', openSidebar);
+            closeMenuBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            // Handle initial page load
+            const initialHash = window.location.hash || '#dashboard';
+            const initialLink = document.querySelector(`.nav-link[href="${initialHash}"]`) || document.querySelector('.nav-link');
+            if (initialLink) {
+                const targetId = initialLink.getAttribute('href').substring(1);
+                showSection(targetId, initialLink);
+            }
+        });
+    </script>
+
+</body>
+</html>
